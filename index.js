@@ -7,30 +7,72 @@ const bot = new TelegramBot(token, {polling: true});
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 
-  if(msg.text == '/start') {
+  // Main menu keyboard 
 
-   fetch('http://localhost:9000/new',{
-      method:"POST",
-      headers:{
-         'Content-Type':'appplication/json'
-      },
-      body:JSON.stringify({
-         telegramid:msg.chat.id,
-         fullname:msg.chat.first_name,
-      })
+  const MainMenu = {
+   reply_markup: JSON.stringify({
+      keyboard: [
+         [
+            {
+               text:"🛍 Buyurtma berish"
+            }
+         ],
+         [
+            {
+               text:"📞 Biz bilan bog'laning"
+            },
+            {
+               text:"⚙️ Sozlamalar"
+            },
+            {
+               text:"🏠 Mening manzillarim"
+            }
+         ]
+      ],
+      resize_keyboard:true
    })
-      .then(res => res.json())
-      .then(data => {
-         console.log(data)
-      })
-      .catch(err => {
-         console.log(err)
+  }
+
+  const Products = {
+      reply_markup: JSON.stringify({
+         keyboard: [
+            [
+               {
+                  text:"Product 1"
+               },
+               {
+                  text:"Product 2"
+               }
+            ],
+            [
+               {
+                  text:"Product 1"
+               },
+               {
+                  text:"Product 2"
+               }
+            ],
+            [
+               {
+                  text:"Product 1"
+               },
+               {
+                  text:"⬅️ Orqaga"
+               }
+            ]
+         ],
+         resize_keyboard:true
       })
    }
 
-   
+ 
 
-   bot.sendMessage(chatId,'salom')
+   if(msg.text === '/start' || msg.text === "⬅️ Orqaga") {
+      bot.sendMessage(chatId,"Asosiy menu",MainMenu)
+   }else if (msg.text === '🛍 Buyurtma berish') {
+      bot.sendMessage(chatId,"Buyurtmangizni davom ettiring",Products)
+   } 
+
 
 });
 
